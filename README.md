@@ -27,18 +27,24 @@
 
 ## 🚀 快速开始
 
-### 1. 安装
+### 一键安装
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Terry-iotex/claude-memory-system/main/install.sh | bash
+```
+
+### 手动安装
 
 ```bash
 # 克隆仓库
 git clone https://github.com/Terry-iotex/claude-memory-system.git
 cd claude-memory-system
 
-# 复制到用户目录
-cp -r . ~/.claude/memory-system
+# 运行安装脚本
+./scripts/install.sh
 ```
 
-### 2. 从旧记忆迁移
+### 从旧记忆迁移
 
 ```bash
 python3 ~/.claude/memory-system/scripts/migrate.py
@@ -46,7 +52,9 @@ python3 ~/.claude/memory-system/scripts/migrate.py
 
 这会将你现有的 Claude 记忆自动迁移到新系统。
 
-### 3. 基本使用
+## 📚 基本使用
+
+### 命令行
 
 ```bash
 # 查看状态
@@ -59,7 +67,7 @@ python3 ~/.claude/memory-system/scripts/memory_manager.py search --query "按钮
 python3 ~/.claude/memory-system/scripts/memory_manager.py cleanup
 ```
 
-## 📚 API 使用
+### Python API
 
 ```python
 from memory_manager import MemoryManager
@@ -91,13 +99,57 @@ working = manager.get_working(days=7)
 manager.cleanup_old_memories(days=90)
 ```
 
+## 🤖 集成到 AI 工具
+
+### Claude Code 集成
+
+在 `~/.claude/projects/-root/memory/MEMORY.md` 中添加：
+
+```markdown
+## 🧠 分层记忆系统
+
+使用分层记忆系统管理历史记忆：
+
+```bash
+# 搜索记忆
+python3 ~/.claude/memory-system/scripts/memory_manager.py search --query "关键词"
+```
+```
+
+### OpenClaw 集成
+
+```bash
+# 运行 OpenClaw 集成脚本
+python3 ~/.claude/memory-system/scripts/integrate_openclaw.py
+```
+
+这会自动：
+- 更新 `~/.openclaw/workspace/TOOLS.md` 添加工具说明
+- 更新 `~/.openclaw/workspace/AGENTS.md` 添加使用指南
+- 创建 Claude Code Skill 集成
+
+手动集成步骤：
+
+1. 编辑 `~/.openclaw/workspace/TOOLS.md`，添加：
+
+```markdown
+## 🧠 分层记忆系统
+
+### 命令
+```bash
+python3 ~/.claude/memory-system/scripts/memory_manager.py search --query "关键词"
+```
+```
+
+2. 编辑 `~/.openclaw/workspace/AGENTS.md`，在 Memory 部分添加说明
+
 ## ⚙️ 配置
 
 编辑 `~/.claude/memory-system/config.json`:
 
 ```json
 {
-  "core_memory_limit_kb": 1,
+  "core_memory_limit_kb": 50,
   "working_memory_days": 7,
   "observational_compress_days": 30,
   "auto_archive": true,
@@ -115,7 +167,9 @@ manager.cleanup_old_memories(days=90)
 ├── archival/          # 档案记忆（可向量检索）
 ├── scripts/           # 工具脚本
 │   ├── memory_manager.py
-│   └── migrate.py
+│   ├── migrate.py
+│   ├── install.sh
+│   └── integrate_openclaw.py
 └── config.json        # 配置文件
 ```
 
@@ -125,33 +179,52 @@ manager.cleanup_old_memories(days=90)
 2. **快速访问** - 常用信息始终在手边
 3. **深度回忆** - 旧记忆通过搜索找回
 4. **自动整理** - 过期内容自动归档
+5. **多平台兼容** - Claude Code, OpenClaw, 其他 AI 工具
 
-## 🔄 与 Claude Code 集成
+## 🔄 在另一台电脑上使用
 
-在 `MEMORY.md` 中添加：
+### 1. 克隆仓库并安装
 
-```
-## 🧠 分层记忆系统
-
-使用分层记忆系统管理历史记忆：
-
-```python
-from memory_manager import MemoryManager
-manager = MemoryManager()
-```
-
-**搜索记忆：**
 ```bash
-python3 ~/.claude/memory-system/scripts/memory_manager.py search --query "关键词"
+git clone https://github.com/Terry-iotex/claude-memory-system.git
+cd claude-memory-system
+./scripts/install.sh
 ```
+
+### 2. 如果有旧记忆，迁移
+
+```bash
+python3 ~/.claude/memory-system/scripts/migrate.py
+```
+
+### 3. 集成到 OpenClaw（如果使用）
+
+```bash
+python3 ~/.claude/memory-system/scripts/integrate_openclaw.py
+```
+
+### 4. 同步记忆（可选）
+
+如果你想在多台电脑间同步记忆：
+
+```bash
+# 使用 git 同步
+cd ~/.claude/memory-system
+git init
+git remote add origin <你的远程仓库>
+git add -A && git commit -m "记忆同步"
+git push
 ```
 
 ## 📝 开发计划
 
+- [x] 基础分层记忆系统
+- [x] OpenClaw 集成
+- [x] Claude Code Skill 集成
 - [ ] 向量检索集成（ChromaDB + sentence-transformers）
 - [ ] Observer Agent 自动压缩
 - [ ] 自动语义归档
-- [ ] Claude Code Skill 集成
+- [ ] 多设备同步
 
 ## 📄 许可证
 
