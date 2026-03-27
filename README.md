@@ -60,8 +60,22 @@ python3 ~/.claude/memory-system/scripts/migrate.py
 # 查看状态
 python3 ~/.claude/memory-system/scripts/memory_manager.py status
 
-# 搜索记忆
+# 搜索记忆（关键词）
 python3 ~/.claude/memory-system/scripts/memory_manager.py search --query "按钮"
+
+# 向量语义搜索（更智能）
+python3 ~/.claude/memory-system/scripts/vector_search.py search --query "按钮点击问题"
+python3 ~/.claude/memory-system/scripts/vector_search.py search --query "怎么处理图片"
+python3 ~/.claude/memory-system/scripts/vector_search.py search --query "项目规范"
+
+# 查看向量库状态
+python3 ~/.claude/memory-system/scripts/vector_search.py status
+
+# 索引记忆（首次使用或更新后）
+python3 ~/.claude/memory-system/scripts/vector_search.py index
+
+# 重建索引
+python3 ~/.claude/memory-system/scripts/vector_search.py reindex
 
 # 清理过期记忆
 python3 ~/.claude/memory-system/scripts/memory_manager.py cleanup
@@ -85,8 +99,15 @@ mem_id = manager.add_working("正在开发 web-tester 项目", tags=["project", 
 # 添加档案记忆（永久存储）
 archive_id = manager.add_archival("按钮检测问题的解决方法...", {"project": "web-tester"})
 
-# 搜索记忆
+# 搜索记忆（关键词）
 results = manager.search("按钮检测", layer="all")
+
+# 向量语义搜索
+from vector_search import VectorSearch
+vs = VectorSearch()
+results = vs.search("按钮点击问题", top_k=5)
+for r in results:
+    print(f"[{r['score']:.2f}] {r['content'][:100]}")
 
 # 获取核心记忆
 core = manager.get_core()  # 获取全部
@@ -165,8 +186,10 @@ python3 ~/.claude/memory-system/scripts/memory_manager.py search --query "关键
 ├── working/           # 工作记忆（7天，自动归档）
 ├── observational/     # 观察日志（按月压缩）
 ├── archival/          # 档案记忆（可向量检索）
+├── .chroma_db/        # 向量数据库（自动创建）
 ├── scripts/           # 工具脚本
 │   ├── memory_manager.py
+│   ├── vector_search.py  # 向量语义搜索
 │   ├── migrate.py
 │   ├── install.sh
 │   └── integrate_openclaw.py
@@ -221,7 +244,7 @@ git push
 - [x] 基础分层记忆系统
 - [x] OpenClaw 集成
 - [x] Claude Code Skill 集成
-- [ ] 向量检索集成（ChromaDB + sentence-transformers）
+- [x] 向量检索集成（ChromaDB + sentence-transformers）
 - [ ] Observer Agent 自动压缩
 - [ ] 自动语义归档
 - [ ] 多设备同步
