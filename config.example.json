@@ -1,0 +1,25 @@
+{
+  "core_memory_limit_kb": 1,
+  "working_memory_days": 7,
+  "observational_compress_days": 30,
+  "auto_archive": true,
+  "auto_cleanup_days": 90,
+  "layers": {
+    "core": {
+      "description": "始终加载的关键信息",
+      "examples": ["用户身份", "关键规则", "重要配置"]
+    },
+    "working": {
+      "description": "最近7天的活跃记忆",
+      "examples": ["当前任务", "最近对话", "进行中的工作"]
+    },
+    "observational": {
+      "description": "压缩的历史记录",
+      "examples": ["完成的任务", "历史决策", "问题解决记录"]
+    },
+    "archival": {
+      "description": "向量数据库，按需检索",
+      "examples": ["所有历史记忆", "项目文档", "知识库"]
+    }
+  }
+}
